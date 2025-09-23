@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打开音乐App</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .music-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: white;
+            color: #667eea;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            font-weight: bold;
+        }
+        .tips {
+            margin-top: 30px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+<div class="music-icon">🎵</div>
+<h1>发现一首好音乐</h1>
+<p>正在为您打开【你的音乐App】播放...</p>
+
+<div id="wechat-tips" style="display: none;">
+    <p>⚠️ 请在浏览器中打开</p>
+    <a href="#" id="open-in-browser" class="btn">点击在浏览器打开</a>
+    <div class="tips">点击右上角「...」选择「在浏览器打开」</div>
+</div>
+
+<script>
+    // 获取歌曲参数
+    const urlParams = new URLSearchParams(window.location.search);
+    const songId = urlParams.get('song_id');
+
+    // 你的App的Scheme，例如：musicapp://play?song_id=12345
+    const appScheme = `musicapp://play?song_id=${songId || '12345'}`;
+
+    // App Store下载地址
+    const appStoreUrl = "https://apps.apple.com/app/your-music-app/id123456";
+    // 安卓市场下载地址
+    const androidStoreUrl = "https://play.google.com/store/apps/details?id=com.yourapp.music";
+
+    function isWeChat() {
+        return /MicroMessenger/i.test(navigator.userAgent);
+    }
+
+    function tryOpenApp() {
+        // 尝试唤醒App
+        window.location.href = appScheme;
+
+        // 如果2秒后还在当前页面，说明没有安装App
+        setTimeout(function() {
+            if (!document.hidden) {
+                // 根据设备跳转到对应的应用商店
+                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    window.location.href = appStoreUrl;
+                } else {
+                    window.location.href = androidStoreUrl;
+                }
+            }
+        }, 2000);
+    }
+
+    // 页面加载完成后执行
+    window.onload = function() {
+        if (isWeChat()) {
+            // 在微信内，显示引导提示
+            document.getElementById('wechat-tips').style.display = 'block';
+
+            // 设置浏览器打开按钮的链接
+            document.getElementById('open-in-browser').href =
+                `your-music-app://browser-redirect?url=${encodeURIComponent(window.location.href)}`;
+        } else {
+            // 不在微信内，直接尝试打开App
+            tryOpenApp();
+        }
+    };
+</script>
+</body>
+</html>
