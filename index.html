@@ -68,7 +68,7 @@
         // 尝试唤醒App
         window.location.href = appScheme;
 
-        // 如果2秒后还在当前页面，说明没有安装App
+        // 如果3秒后还在当前页面，说明没有安装App
         setTimeout(function () {
             if (!document.hidden) {
                 // 根据设备跳转到对应的应用商店
@@ -88,8 +88,8 @@
             document.getElementById('wechat-tips').style.display = 'block';
 
             // 设置浏览器打开按钮的链接
-            document.getElementById('open-in-browser').href =
-                `lingxi://mingyue?url=${encodeURIComponent(window.location.href)}`;
+            document.getElementById('open-in-browser').href = "https://www.baidu.com/";
+            // `lingxi://mingyue?url=${encodeURIComponent(window.location.href)}`;
         } else {
             // 不在微信内，直接尝试打开App
             tryOpenApp();
