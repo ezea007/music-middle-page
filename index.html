@@ -53,12 +53,8 @@
 
 <script>
     // 获取歌曲参数
-    const urlParams = new URLSearchParams(window.location.search);
-    const songId = urlParams.get('song_id');
-
     // 你的App的Scheme，例如：lingxi://mingyue?song_id=12345
-    const appScheme = `lingxi://mingyue?song_id=${songId || '12345'}`;
-
+    const appScheme = `lingxi://mingyue${window.location.search}`;
     // App Store下载地址
     const appStoreUrl = "https://apps.apple.com/app/your-music-app/id123456";
     // 安卓市场下载地址
@@ -73,16 +69,16 @@
         window.location.href = appScheme;
 
         // 如果2秒后还在当前页面，说明没有安装App
-        setTimeout(function () {
-            if (!document.hidden) {
-                // 根据设备跳转到对应的应用商店
-                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                    window.location.href = appStoreUrl;
-                } else {
-                    window.location.href = androidStoreUrl;
-                }
-            }
-        }, 3000);
+        // setTimeout(function () {
+        //     if (!document.hidden) {
+        //         // 根据设备跳转到对应的应用商店
+        //         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        //             window.location.href = appStoreUrl;
+        //         } else {
+        //             window.location.href = androidStoreUrl;
+        //         }
+        //     }
+        // }, 3000);
     }
 
     // 页面加载完成后执行
