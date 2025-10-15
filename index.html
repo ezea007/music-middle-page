@@ -1,211 +1,4 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-    <meta name="format-detection" content="telephone=no,email=no,address=no"/>
-    <title>打开浏览器查看</title>
-    <style>
-        :root {
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-right: env(safe-area-inset-right, 0px);
-        }
-
-        html, body {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-            background: #ffffff;
-            color: #222;
-        }
-
-        /* 微信内提示遮罩 */
-        .wechat-guide {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.86);
-            color: #fff;
-            z-index: 9999;
-            display: none;
-        }
-
-        .wechat-guide[aria-hidden="false"] {
-            display: block;
-        }
-
-        .wechat-guide .guide-arrow {
-            position: absolute;
-            top: calc(var(--safe-top) + 8px);
-            right: calc(12px + var(--safe-right));
-            width: 100px;
-            height: 100px;
-            pointer-events: none;
-        }
-
-        /* 斜线 */
-        .wechat-guide .guide-arrow::before {
-            content: "";
-            position: absolute;
-            width: 92px;
-            height: 2px;
-            background: #fff;
-            opacity: 0.95;
-            transform: rotate(-35deg);
-            top: 28px;
-            right: 4px;
-            border-radius: 2px;
-        }
-
-        /* 箭头尖 */
-        .wechat-guide .guide-arrow::after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            border: 8px solid transparent;
-            border-left-color: #fff;
-            border-top-color: #fff;
-            transform: rotate(-35deg);
-            top: 16px;
-            right: -2px;
-        }
-
-        .wechat-guide .bubble {
-            position: absolute;
-            top: calc(var(--safe-top) + 22px);
-            right: calc(120px + var(--safe-right));
-            background: rgba(255, 255, 255, 0.12);
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            border-radius: 14px;
-            padding: 8px 12px;
-            font-size: 13px;
-            backdrop-filter: saturate(120%) blur(4px);
-        }
-
-        .wechat-guide .bubble::after {
-            content: "";
-            position: absolute;
-            right: -6px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 0;
-            height: 0;
-            border-width: 6px;
-            border-style: solid;
-            border-color: transparent transparent transparent rgba(255, 255, 255, 0.35);
-        }
-
-        .wechat-guide .text {
-            position: absolute;
-            left: 10%;
-            right: 10%;
-            bottom: 12%;
-            text-align: center;
-        }
-
-        .wechat-guide .text .title {
-            font-size: 18px;
-            font-weight: 600;
-            margin: 0 0 12px;
-        }
-
-        .wechat-guide .text .line {
-            font-size: 14px;
-            line-height: 1.6;
-            margin: 4px 0;
-            opacity: 0.95;
-        }
-
-        .wechat-guide .text .hint {
-            font-size: 12px;
-            opacity: 0.75;
-            margin-top: 14px;
-        }
-
-        /* 横屏下适配箭头与文案位置 */
-        @media (orientation: landscape) {
-            .wechat-guide .text {
-                bottom: 6%;
-            }
-
-            .wechat-guide .guide-arrow {
-                top: calc(var(--safe-top) + 4px);
-                right: calc(18px + var(--safe-right));
-            }
-
-            .wechat-guide .bubble {
-                top: calc(var(--safe-top) + 14px);
-                right: calc(140px + var(--safe-right));
-            }
-        }
-
-        /* 示例主体内容（在浏览器中访问时正常显示） */
-        .page {
-            display: grid;
-            place-items: center;
-            height: 100%;
-            padding: 24px;
-        }
-
-        .page .brand {
-            font-size: 20px;
-            font-weight: 600;
-            color: #111;
-        }
-    </style>
-</head>
-<body>
-<!-- 页面主体内容（示例，可替换为你的实际内容） -->
-<main class="page">
-    <div class="brand">音乐中间页</div>
-</main>
-
-<!-- 微信引导遮罩，仅在微信内显示 -->
-<aside id="wechat-guide" class="wechat-guide" role="dialog" aria-hidden="true" aria-label="微信内打开浏览器引导">
-    <div class="guide-arrow"></div>
-    <div class="bubble">点此打开菜单</div>
-    <div class="text">
-        <p class="title">请点击右上角 ··· 菜单</p>
-        <p class="line ios" style="display:none;">然后选择“在Safari中打开”以继续</p>
-        <p class="line android" style="display:none;">然后选择“在浏览器中打开”以继续</p>
-        <p class="hint">提示：微信不允许直接跳出应用，只能通过右上角菜单在系统浏览器中打开。</p>
-    </div>
-</aside>
-
-<script>
-    (function () {
-        var ua = navigator.userAgent || "";
-        var isWeChat = /MicroMessenger/i.test(ua);
-        // 尽量只针对移动端微信
-        var isMobile = /(iPhone|iPad|iPod|Android|Mobile)/i.test(ua);
-        var isIOS = /(iPhone|iPad|iPod)/i.test(ua);
-
-        var guide = document.getElementById('wechat-guide');
-        var iosLine = guide && guide.querySelector('.ios');
-        var androidLine = guide && guide.querySelector('.android');
-
-        if (isWeChat && isMobile && guide) {
-            guide.setAttribute('aria-hidden', 'false');
-            if (iosLine && androidLine) {
-                if (isIOS) {
-                    iosLine.style.display = 'block';
-                    androidLine.style.display = 'none';
-                } else {
-                    iosLine.style.display = 'none';
-                    androidLine.style.display = 'block';
-                }
-            }
-        } else {
-            // 非微信环境下隐藏遮罩（正常浏览器访问）
-            guide && guide.setAttribute('aria-hidden', 'true');
-        }
-    })();
-</script>
-</body>
-</html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -215,13 +8,27 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             text-align: center;
-            padding: 50px 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
+        }
+
+        .top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+
+        }
+
+        .loaction-img {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            margin-left: auto;
         }
 
         .music-icon {
@@ -248,16 +55,14 @@
     </style>
 </head>
 <body>
-<div class="music-icon">🎵</div>
-<h1>发现一首好音乐</h1>
-<p>正在为您打开【你的音乐App】播放...</p>
-
-<div id="wechat-tips" style="display: none;">
-    <p>⚠️ 请在浏览器中打开</p>
-    <a href="#" id="open-in-browser" class="btn">点击在浏览器打开</a>
+<div class="top" id="wechat-tips" style="display: none;">
+    <img class="loaction-img" src="loaction.png"/>
     <div class="tips">点击右上角「...」选择「在浏览器打开」</div>
 </div>
 
+<div class="music-icon">🎵</div>
+<h1>发现一首好音乐</h1>
+<p>正在为您打开【你的音乐App】播放...</p>
 <script>
     // 获取歌曲参数
     // 你的App的Scheme，例如：lingxi://mingyue?song_id=12345
