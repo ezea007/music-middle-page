@@ -16,10 +16,12 @@
             flex-direction: column;
             justify-content: center;
         }
+
         .music-icon {
             font-size: 60px;
             margin-bottom: 20px;
         }
+
         .btn {
             background: white;
             color: #667eea;
@@ -30,6 +32,7 @@
             margin: 10px;
             font-weight: bold;
         }
+
         .tips {
             margin-top: 30px;
             font-size: 14px;
@@ -70,7 +73,7 @@
         window.location.href = appScheme;
 
         // 如果2秒后还在当前页面，说明没有安装App
-        setTimeout(function() {
+        setTimeout(function () {
             if (!document.hidden) {
                 // 根据设备跳转到对应的应用商店
                 if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
@@ -79,18 +82,18 @@
                     window.location.href = androidStoreUrl;
                 }
             }
-        }, 2000);
+        }, 3000);
     }
 
     // 页面加载完成后执行
-    window.onload = function() {
+    window.onload = function () {
         if (isWeChat()) {
             // 在微信内，显示引导提示
             document.getElementById('wechat-tips').style.display = 'block';
 
             // 设置浏览器打开按钮的链接
             document.getElementById('open-in-browser').href =
-                `your-music-app://browser-redirect?url=${encodeURIComponent(window.location.href)}`;
+                `lingxi://mingyue?url=${encodeURIComponent(window.location.href)}`;
         } else {
             // 不在微信内，直接尝试打开App
             tryOpenApp();
