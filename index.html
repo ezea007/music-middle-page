@@ -69,16 +69,16 @@
         window.location.href = appScheme;
 
         // 如果2秒后还在当前页面，说明没有安装App
-        // setTimeout(function () {
-        //     if (!document.hidden) {
-        //         // 根据设备跳转到对应的应用商店
-        //         if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        //             window.location.href = appStoreUrl;
-        //         } else {
-        //             window.location.href = androidStoreUrl;
-        //         }
-        //     }
-        // }, 3000);
+        setTimeout(function () {
+            if (!document.hidden) {
+                // 根据设备跳转到对应的应用商店
+                if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    window.location.href = appStoreUrl;
+                } else {
+                    window.location.href = androidStoreUrl;
+                }
+            }
+        }, 3000);
     }
 
     // 页面加载完成后执行
